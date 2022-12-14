@@ -1,4 +1,3 @@
-export * from './ce'
 export * from './pH'
 export * from './tds'
 export * from './temperature'

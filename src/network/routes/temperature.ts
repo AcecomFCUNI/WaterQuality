@@ -17,12 +17,11 @@ const sub = (client: MqttClient) => {
     subDebug(`Topic: ${SUB_TOPIC} - Error:`, error)
   })
 
-  client.on('message', async (topic, message) => {
-    subDebug(`Topic: ${topic} - Message received`)
-
+  client.on('message', (topic, message) => {
     if (topic.includes(TOPIC)) {
+      subDebug(`\nTopic: ${topic} - Message received`)
       subDebug(`Received a ${TOPIC} update at: ${new Date().toISOString()}`)
-      subDebug(`\t${message.toJSON()}`)
+      subDebug(`Message: \t${message}\n`)
     }
   })
 }
