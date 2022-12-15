@@ -36,18 +36,6 @@ const firebaseConnection = async (): Promise<void> => {
         : process.env.FIREBASE_URL_DEV
   })
 
-  const db = global.__firebase__.database(process.env.FIREBASE_REAL_TIME_DB)
-
-  db.ref(`/ids/1671001888107`).set({
-    date: new Date().toISOString(),
-    data: {
-      ph: Math.random(),
-      tds: Math.random(),
-      temperature: Math.random(),
-      turbidity: Math.random()
-    }
-  })
-
   await deleteFile(process.env.GOOGLE_APPLICATION_CREDENTIALS as string)
 
   console.log('Firebase connection established.')

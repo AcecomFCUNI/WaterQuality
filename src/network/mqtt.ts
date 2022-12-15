@@ -7,10 +7,10 @@ let client: mqtt.MqttClient
 const options: mqtt.IClientOptions = {
   port: process.env.MQTT_PORT ? parseInt(process.env.MQTT_PORT) : 0,
   host: process.env.MQTT_HOST,
-  protocol: 'mqtts',
-  keepalive: 0,
-  username: process.env.MQTT_USER,
-  password: process.env.MQTT_PASS
+  protocol: 'mqtt',
+  keepalive: 0
+  // username: process.env.MQTT_USER,
+  // password: process.env.MQTT_PASS
 }
 const namespace = 'WaterQuality:Mqtt:Server'
 const debugMessage = 'Connected to mqtt server'

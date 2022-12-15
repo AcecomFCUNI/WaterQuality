@@ -1,6 +1,7 @@
 import debug from 'debug'
 import { MqttClient } from 'mqtt'
 
+import { updateTurbidity } from 'database'
 import { MAIN_TOPIC } from 'utils'
 
 const TOPIC = 'turbidity'
@@ -19,9 +20,13 @@ const sub = (client: MqttClient) => {
 
   client.on('message', (topic, message) => {
     if (topic.includes(TOPIC)) {
+      const db = global.__firebase__.database(process.env.FIREBASE_REAL_TIME_DB)
+      const [id, projectId, value] = message.toString().split('/')
+
       subDebug(`\nTopic: ${topic} - Message received`)
       subDebug(`Received a ${TOPIC} update at: ${new Date().toISOString()}`)
       subDebug(`Message: \t${message}\n`)
+      updateTurbidity({ db, id, projectId, value: parseFloat(value) })
     }
   })
 }
