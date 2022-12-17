@@ -1,5 +1,5 @@
 import debug from 'debug'
-import { getClient } from './network'
+import { getClient } from './network/mqtt'
 
 const pubDebug = debug('WaterQuality:Mqtt:demo:pub')
 const client = getClient()

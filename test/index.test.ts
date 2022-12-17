@@ -2,10 +2,10 @@ import mqtt from 'mqtt'
 import debug from 'debug'
 
 import * as mqttServer from '../src/network/mqtt'
-import * as router from '../src/network/router'
+import * as router from '../src/network/mqtt/router'
 
 beforeAll(async () => {
-  await mqttServer.start()
+  await mqttServer.start(debug('Testing:WaterQuality:Mqtt:Server'))
 })
 
 afterAll(async () => {
@@ -19,7 +19,7 @@ jest.mock('mqtt', () => {
     connect: jest.fn(() => {
       return {
         on: jest.fn().mockImplementation(() => {
-          mockDebug(mqttServer.debugMessage)
+          mockDebug(mqttServer.connectedMessage)
         }),
         end: jest.fn(),
         subscribe: jest.fn()
@@ -40,14 +40,14 @@ describe('WaterQuality backend tests', () => {
       expect(mqtt.connect).toHaveBeenCalled()
     })
 
-    test(`Client debug should be called with "${mqttServer.namespace}"`, async () => {
-      expect(debug).toHaveBeenCalled()
-      expect(debug).toHaveBeenCalledWith(mqttServer.namespace)
-    })
+    // test(`Client debug should be called with "${mqttServer.namespace}"`, async () => {
+    //   expect(debug).toHaveBeenCalled()
+    //   expect(debug).toHaveBeenCalledWith(mqttServer.namespace)
+    // })
 
-    test(`Client serverDebug should be called with "${mqttServer.debugMessage}"`, async () => {
+    test(`Client serverDebug should be called with "${mqttServer.connectedMessage}"`, async () => {
       expect(mockDebug).toHaveBeenCalled()
-      expect(mockDebug).toHaveBeenCalledWith(mqttServer.debugMessage)
+      expect(mockDebug).toHaveBeenCalledWith(mqttServer.connectedMessage)
     })
 
     test('applyRoutes method should be called once', () => {
