@@ -29,7 +29,7 @@ const socketConnection = (d: Debugger) => ({
           fn(null, true)
         },
         cors: {
-          origin: ['http://localhost:3000']
+          origin: ['http://localhost:3000', process.env.FRONT_URL as string]
         }
       })
 
