@@ -3,6 +3,7 @@ import { MqttClient } from 'mqtt'
 
 import { updateTDS } from 'database'
 import { MAIN_TOPIC } from 'utils'
+import { socketConnection } from 'network/socket'
 
 const TOPIC = 'totalDissolvedSolids'
 const SUB_TOPIC = `${MAIN_TOPIC}/${TOPIC}`
@@ -27,6 +28,7 @@ const sub = (client: MqttClient) => {
       subDebug(`Received a ${TOPIC} update at: ${new Date().toISOString()}`)
       subDebug(`Message: \t${message}\n`)
       updateTDS({ db, projectId, id, value: parseFloat(value) })
+      socketConnection(subDebug).connect().emit('tds', parseFloat(value))
     }
   })
 }

@@ -11,8 +11,12 @@ const updateDate = ({ db, id, projectId, value }: Update<string>) => {
   db.ref(`/ids/${id}/${projectId}/data/date`).set(value)
 }
 
-const updatePh = ({ db, id, projectId, value }: Update) => {
-  db.ref(`/ids/${id}/${projectId}/data/ph`).set(value)
+const updatePH = ({ db, id, projectId, value }: Update) => {
+  db.ref(`/ids/${id}/${projectId}/data/pH`).set(value)
+}
+
+const getData = ({ db, id, projectId }: Omit<Update, 'value'>) => {
+  return db.ref(`/ids/${id}/${projectId}/data`).get()
 }
 
 const updateTDS = ({ db, id, projectId, value }: Update) => {
@@ -23,12 +27,25 @@ const updateTemperature = ({ db, id, projectId, value }: Update) => {
   db.ref(`/ids/${id}/${projectId}/data/temperature`).set(value)
 }
 
-const updateTurbidity = ({ db, id, projectId, value }: Update) => {
+const updateTurbidity = ({
+  db,
+  id,
+  projectId,
+  value,
+  date
+}: Update & { date: Date }) => {
   db.ref(`/ids/${id}/${projectId}/data/turbidity`).set(value, error => {
-    if (error) return console.error('Error on updatePh', error)
+    if (error) return console.error('Error on updatePH', error)
 
-    updateDate({ db, id, projectId, value: new Date().toISOString() })
+    updateDate({ db, id, projectId, value: date.toISOString() })
   })
 }
 
-export { updatePh, updateTDS, updateTemperature, updateTurbidity, updateDate }
+export {
+  updatePH,
+  getData,
+  updateTDS,
+  updateTemperature,
+  updateTurbidity,
+  updateDate
+}

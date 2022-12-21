@@ -22,7 +22,10 @@ const firebaseConfig: FirebaseConfig = {
   type: process.env.FIREBASE_TYPE as string
 }
 
-const firebaseConnection = async (d: Debugger): Promise<void> => {
+const firebaseConnection = async (
+  d: Debugger,
+  fn: () => void
+): Promise<void> => {
   await writeJson(
     process.env.GOOGLE_APPLICATION_CREDENTIALS as string,
     JSON.stringify(firebaseConfig).replace(/\\\\/g, '\\'),
@@ -39,6 +42,7 @@ const firebaseConnection = async (d: Debugger): Promise<void> => {
 
   await deleteFile(process.env.GOOGLE_APPLICATION_CREDENTIALS as string)
   d('Firebase connection established.')
+  fn()
 }
 
 export { firebaseConnection }

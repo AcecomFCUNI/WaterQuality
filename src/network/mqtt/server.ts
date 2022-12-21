@@ -16,8 +16,8 @@ const options: mqtt.IClientOptions = {
         password: process.env.MQTT_PASS
       })
 }
-const connectedMessage = 'Connected to mqtt server'
-const disconnectedMessage = 'Connected to mqtt server'
+const connectedMessage = 'Connected to MQTT server.'
+const disconnectedMessage = 'Disconnected from MQTT server.'
 
 const getClient = (d?: Debugger) => {
   if (!client) {

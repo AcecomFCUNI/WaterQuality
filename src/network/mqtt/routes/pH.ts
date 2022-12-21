@@ -1,7 +1,8 @@
 import debug from 'debug'
 import { MqttClient } from 'mqtt'
 
-import { updatePh } from 'database'
+import { socketConnection } from 'network/socket'
+import { updatePH } from 'database'
 import { MAIN_TOPIC } from 'utils'
 
 const TOPIC = 'pH'
@@ -26,7 +27,8 @@ const sub = (client: MqttClient) => {
       subDebug(`\nTopic: ${topic} - Message received`)
       subDebug(`Received a ${TOPIC} update at: ${new Date().toISOString()}`)
       subDebug(`Message: \t${message}\n`)
-      updatePh({ db, projectId, id, value: parseFloat(value) })
+      updatePH({ db, projectId, id, value: parseFloat(value) })
+      socketConnection(subDebug).connect().emit('pH', parseFloat(value))
     }
   })
 }
