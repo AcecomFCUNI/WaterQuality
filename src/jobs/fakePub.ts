@@ -3,7 +3,7 @@ import debug from 'debug'
 import { MqttClient } from 'mqtt'
 
 const randomInInterval = (min: number, max: number, fix = 2): string =>
-  (Math.random() * (max - min + 1) + min).toFixed(fix)
+  (Math.random() * (max - min) + min).toFixed(fix)
 
 const updateData = (client: MqttClient) => {
   return new CronJob('*/15 * * * * *', async (): Promise<void> => {
