@@ -1,3 +1,3 @@
-const MAIN_TOPIC = 'WaterQuality'
+const MAIN_TOPIC = 'WQ'
 
 export { MAIN_TOPIC }

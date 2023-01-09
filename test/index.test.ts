@@ -3,9 +3,10 @@ import debug from 'debug'
 
 import * as mqttServer from '../src/network/mqtt'
 import * as router from '../src/network/mqtt/router'
+import { MAIN_TOPIC } from '../src/utils'
 
 beforeAll(async () => {
-  await mqttServer.start(debug('Testing:WaterQuality:Mqtt:Server'))
+  await mqttServer.start(debug(`Testing:${MAIN_TOPIC}:Mqtt:Server`))
 })
 
 afterAll(async () => {
@@ -34,7 +35,7 @@ jest.mock('debug', () => {
 
 const applyRoutes = jest.spyOn(router, 'applyRoutes')
 
-describe('WaterQuality backend tests', () => {
+describe(`${MAIN_TOPIC} backend tests`, () => {
   describe('Server', () => {
     test('Client connect should be called once', async () => {
       expect(mqtt.connect).toHaveBeenCalled()

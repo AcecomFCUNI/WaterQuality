@@ -9,7 +9,7 @@ const TOPIC = 'turbidity'
 const SUB_TOPIC = `${MAIN_TOPIC}/${TOPIC}`
 
 const sub = (client: MqttClient) => {
-  const subDebug = debug(`WaterQuality:Mqtt:${TOPIC}:sub`)
+  const subDebug = debug(`${MAIN_TOPIC}:Mqtt:${TOPIC}:sub`)
 
   client.subscribe(SUB_TOPIC, error => {
     if (!error) subDebug(`Subscribed to Topic: ${SUB_TOPIC}`)
@@ -22,7 +22,7 @@ const sub = (client: MqttClient) => {
   client.on('message', (topic, message) => {
     if (topic.includes(TOPIC)) {
       const db = global.__firebase__.database(process.env.FIREBASE_REAL_TIME_DB)
-      const [id, projectId, value] = message.toString().split('/')
+      const [id, moduleId, sensorId, value] = message.toString().split('/')
       const date = new Date()
 
       subDebug(`\nTopic: ${topic} - Message received`)
@@ -31,13 +31,14 @@ const sub = (client: MqttClient) => {
       updateTurbidity({
         db,
         id,
-        projectId,
+        moduleId,
         value: parseFloat(value),
-        date
+        date,
+        sensorId
       })
       socketConnection(subDebug)
         .connect()
-        .emit('turbidity', {
+        .emit(`${sensorId}/turbidity`, {
           value: parseFloat(value),
           date: date.toISOString()
         })

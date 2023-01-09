@@ -1,16 +1,16 @@
 import debug from 'debug'
 
 import { firebaseConnection } from 'database'
+import { MAIN_TOPIC } from 'utils'
 import { getClient, start as startMqtt } from './mqtt'
 import { socketConnection } from './socket'
 
-const namespace = 'WaterQuality:Mqtt:Server'
+const namespace = `${MAIN_TOPIC}:Mqtt:Server`
 const serverDebug = debug(namespace)
 
 const start = async () => {
   firebaseConnection(serverDebug, () => socketConnection(serverDebug).connect())
   startMqtt(serverDebug)
-  // startSocket(serverDebug)
 
   // TODO: this shouldn't be done in production
   if (process.env.NODE_ENV === 'production') {

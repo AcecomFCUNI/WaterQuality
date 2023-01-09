@@ -6,11 +6,11 @@
   "scripts": {
     "lint": "eslint src/* --ext .ts",
     "service": "nodemon",
-    "start": "DEBUG=WaterQuality:* ts-node ./src/index",
+    "start": "DEBUG=WQ:* ts-node ./src/index",
     "release": "standard-version",
     "test:local": "jest --setupFiles dotenv/config --ci -i",
     "test:ci": "jest --ci -i",
-    "pub": "nodemon --exec \"DEBUG=WaterQuality:* ts-node -r dotenv/config src/pub.ts\""
+    "pub": "nodemon --exec \"DEBUG=WQ:* ts-node -r dotenv/config src/pub.ts\""
   },
   "author": "AnthonyLzq <sluzquinosa@uni.pe>",
   "license": "MIT",
@@ -61,7 +61,7 @@
     "ignore": [
       "src/**/*.test.ts"
     ],
-    "exec": "DEBUG=WaterQuality:* npx ts-node -r dotenv/config ./src/index"
+    "exec": "DEBUG=WQ:* npx ts-node -r dotenv/config ./src/index"
   },
   "engines": {
     "node": ">=16",

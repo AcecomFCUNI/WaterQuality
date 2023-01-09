@@ -3,41 +3,43 @@ import { Database } from 'firebase-admin/lib/database/database.js'
 type Update<T = number> = {
   db: Database
   id: string
-  projectId: string
+  moduleId: string
+  sensorId: string
   value: T
 }
 
-const updateDate = ({ db, id, projectId, value }: Update<string>) => {
-  db.ref(`/ids/${id}/${projectId}/data/date`).set(value)
+const updateDate = ({ db, id, moduleId, sensorId, value }: Update<string>) => {
+  db.ref(`/ids/${id}/${moduleId}/${sensorId}/date`).set(value)
 }
 
-const updatePH = ({ db, id, projectId, value }: Update) => {
-  db.ref(`/ids/${id}/${projectId}/data/pH`).set(value)
+const updatePH = ({ db, id, moduleId, sensorId, value }: Update) => {
+  db.ref(`/ids/${id}/${moduleId}/${sensorId}/pH`).set(value)
 }
 
-const getData = ({ db, id, projectId }: Omit<Update, 'value'>) => {
-  return db.ref(`/ids/${id}/${projectId}/data`).get()
+const getData = ({ db, id, moduleId, sensorId }: Omit<Update, 'value'>) => {
+  return db.ref(`/ids/${id}/${moduleId}/${sensorId}`).get()
 }
 
-const updateTDS = ({ db, id, projectId, value }: Update) => {
-  db.ref(`/ids/${id}/${projectId}/data/tds`).set(value)
+const updateTDS = ({ db, id, moduleId, sensorId, value }: Update) => {
+  db.ref(`/ids/${id}/${moduleId}/${sensorId}/tds`).set(value)
 }
 
-const updateTemperature = ({ db, id, projectId, value }: Update) => {
-  db.ref(`/ids/${id}/${projectId}/data/temperature`).set(value)
+const updateTemperature = ({ db, id, moduleId, sensorId, value }: Update) => {
+  db.ref(`/ids/${id}/${moduleId}/${sensorId}/temperature`).set(value)
 }
 
 const updateTurbidity = ({
   db,
   id,
-  projectId,
+  moduleId,
+  sensorId,
   value,
   date
 }: Update & { date: Date }) => {
-  db.ref(`/ids/${id}/${projectId}/data/turbidity`).set(value, error => {
-    if (error) return console.error('Error on updatePH', error)
+  db.ref(`/ids/${id}/${moduleId}/${sensorId}/turbidity`).set(value, error => {
+    if (error) return console.error('Error on update turbidity', error)
 
-    updateDate({ db, id, projectId, value: date.toISOString() })
+    updateDate({ db, id, moduleId, sensorId, value: date.toISOString() })
   })
 }
 

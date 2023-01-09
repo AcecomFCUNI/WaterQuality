@@ -8,7 +8,8 @@ const socketConnection = (d: Debugger) => ({
   connect: () => {
     if (!global.__io__) {
       let id: string
-      let projectId: string
+      let moduleId: string
+      let sensorId: string
 
       global.__io__ = new Server(PORT, {
         allowRequest(req, fn) {
@@ -21,10 +22,11 @@ const socketConnection = (d: Debugger) => ({
                 .replace(/&/g, '","')
                 .replace(/=/g, '":"') +
               '"}'
-          ) as { id: string; projectId: string }
+          ) as { id: string; moduleId: string; sensorId: string }
 
           id = query.id
-          projectId = query.projectId
+          moduleId = query.moduleId
+          sensorId = query.sensorId
 
           fn(null, true)
         },
@@ -37,7 +39,7 @@ const socketConnection = (d: Debugger) => ({
         const db = global.__firebase__.database(
           process.env.FIREBASE_REAL_TIME_DB
         )
-        const data = await getData({ db, id, projectId })
+        const data = await getData({ db, id, moduleId, sensorId })
 
         socket.emit('initialData', data.val())
       })
