@@ -4,9 +4,9 @@ import { MqttClient } from 'mqtt'
 
 import { MAIN_TOPIC } from 'utils'
 
-const CLIENT_ID = 'fd39c142-8543-4d2a-a8a6-558874045624'
-const MODULE_ID = 2
-const SENSOR_ID = 1
+const CLIENT_ID = '95008c5b-db0f-442f-99c0-4dc06562a91a'
+const MODULE_ID = 3
+const SENSOR_ID = 2
 
 const randomInInterval = (min: number, max: number, fix = 2): string =>
   (Math.random() * (max - min) + min).toFixed(fix)
