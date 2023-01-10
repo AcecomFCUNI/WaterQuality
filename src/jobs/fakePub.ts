@@ -25,7 +25,7 @@ const updateData = (client: MqttClient) => {
       `${CLIENT_ID}/${MODULE_ID}/${SENSOR_ID}/${randomInInterval(6.5, 7.5, 1)}`,
       () => {
         client.publish(
-          `${MAIN_TOPIC}/totalDissolvedSolids`,
+          `${MAIN_TOPIC}/tds`,
           `${CLIENT_ID}/${MODULE_ID}/${SENSOR_ID}/${randomInInterval(
             100,
             200,

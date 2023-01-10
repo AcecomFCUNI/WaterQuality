@@ -5,7 +5,7 @@ import { updateTDS } from 'database'
 import { MAIN_TOPIC } from 'utils'
 import { socketConnection } from 'network/socket'
 
-const TOPIC = 'totalDissolvedSolids'
+const TOPIC = 'tds'
 const SUB_TOPIC = `${MAIN_TOPIC}/${TOPIC}`
 
 const sub = (client: MqttClient) => {
@@ -35,9 +35,9 @@ const sub = (client: MqttClient) => {
   })
 }
 
-const totalDissolvedSolids: Route = {
+const tds: Route = {
   sub,
   SUB_TOPIC
 }
 
-export { totalDissolvedSolids }
+export { tds }
