@@ -10,7 +10,7 @@ const options: mqtt.IClientOptions = {
   port: process.env.MQTT_PORT ? parseInt(process.env.MQTT_PORT) : 0,
   host: process.env.MQTT_HOST,
   keepalive: 0,
-  ...(process.env.NODE_ENV === 'development'
+  ...(process.env.NODE_ENV === 'production'
     ? {
         protocol: 'mqtt'
       }
