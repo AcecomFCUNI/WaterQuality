@@ -42,19 +42,11 @@ const updateData = (client: MqttClient) => {
         () => {
           client.publish(
             `${MAIN_TOPIC}/tds`,
-            `${id}/${moduleId}/${sensorId}/${randomInInterval(
-              100,
-              200,
-              0
-            )}`,
+            `${id}/${moduleId}/${sensorId}/${randomInInterval(100, 200, 0)}`,
             () => {
               client.publish(
                 `${MAIN_TOPIC}/temperature`,
-                `${id}/${moduleId}/${sensorId}/${randomInInterval(
-                  22,
-                  25,
-                  1
-                )}`,
+                `${id}/${moduleId}/${sensorId}/${randomInInterval(22, 25, 1)}`,
                 () => {
                   client.publish(
                     `${MAIN_TOPIC}/turbidity`,

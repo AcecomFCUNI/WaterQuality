@@ -44,12 +44,20 @@ const updateTurbidity = ({
 }
 
 // TODO: modify this function to update the sensorData in the postgreSQL database
-const listenChangesInDate = ({ db, id, moduleId, sensorId }: Omit<Update, 'value'>) => {
-  db.ref(`/ids/${id}/${moduleId}/${sensorId}/date`).on('value', async snapshot => {
-    const data = await getData({ db, id, moduleId, sensorId })
+const listenChangesInDate = ({
+  db,
+  id,
+  moduleId,
+  sensorId
+}: Omit<Update, 'value'>) => {
+  db.ref(`/ids/${id}/${moduleId}/${sensorId}/date`).on(
+    'value',
+    async snapshot => {
+      const data = await getData({ db, id, moduleId, sensorId })
 
-    console.log('Date changed', data.val())
-  })
+      console.log('Date changed', data.val())
+    }
+  )
 }
 
 export {
