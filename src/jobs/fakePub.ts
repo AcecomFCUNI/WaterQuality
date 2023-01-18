@@ -21,10 +21,19 @@ const randomInInterval = (min: number, max: number, fix = 2): string =>
   (Math.random() * (max - min) + min).toFixed(fix)
 
 const updateData = (client: MqttClient) => {
+  let errorRegistered = false
+
   cron.schedule('*/10 * * * * *', async (): Promise<void> => {
     const pubDebug = debug(`${MAIN_TOPIC}:Mqtt:demo:pub`)
 
     pubDebug(`Job started at: ${new Date().toISOString()}`)
+
+    if (!errorRegistered) {
+      client.on('error', error => {
+        pubDebug('Error: ', error)
+      })
+      errorRegistered = true
+    }
 
     clients.forEach(({ id, moduleId, sensorId }) => {
       client.publish(
