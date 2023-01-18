@@ -41,7 +41,7 @@ const socketConnection = (d: Debugger) => ({
         )
         const data = await getData({ db, id, moduleId, sensorId })
 
-        socket.emit(`${sensorId}/initialData`, data.val())
+        socket.emit(`${sensorId}/initialData`, data)
       })
 
       d(`Socket server started on port: ${PORT}.`)

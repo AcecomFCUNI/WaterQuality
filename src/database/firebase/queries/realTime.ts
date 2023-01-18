@@ -1,4 +1,18 @@
+import { saveClientData } from 'database/postgres'
 import { Database } from 'firebase-admin/lib/database/database.js'
+import { z } from 'zod'
+
+const clientData = z.object({
+  date: z.string(),
+  pH: z.number(),
+  tds: z.number(),
+  temperature: z.number(),
+  turbidity: z.number()
+})
+
+declare global {
+  type ClientData = z.infer<typeof clientData>
+}
 
 type Update<T = number> = {
   db: Database
@@ -8,8 +22,15 @@ type Update<T = number> = {
   value: T
 }
 
-const getData = ({ db, id, moduleId, sensorId }: Omit<Update, 'value'>) => {
-  return db.ref(`/ids/${id}/${moduleId}/${sensorId}`).get()
+const getData = async ({
+  db,
+  id,
+  moduleId,
+  sensorId
+}: Omit<Update, 'value'>): Promise<ClientData> => {
+  const result = await db.ref(`/ids/${id}/${moduleId}/${sensorId}`).get()
+
+  return clientData.parse(result.val())
 }
 
 const updateDate = ({ db, id, moduleId, sensorId, value }: Update<string>) => {
@@ -50,14 +71,15 @@ const listenChangesInDate = ({
   moduleId,
   sensorId
 }: Omit<Update, 'value'>) => {
-  db.ref(`/ids/${id}/${moduleId}/${sensorId}/date`).on(
-    'value',
-    async snapshot => {
-      const data = await getData({ db, id, moduleId, sensorId })
+  db.ref(`/ids/${id}/${moduleId}/${sensorId}/date`).on('value', async () => {
+    const data = await getData({ db, id, moduleId, sensorId })
 
-      console.log('Date changed', data.val())
+    try {
+      await saveClientData(z.coerce.number().parse(sensorId), data)
+    } catch (error) {
+      console.error('Error: ', error)
     }
-  )
+  })
 }
 
 export {

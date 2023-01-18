@@ -17,7 +17,7 @@ model Client {
   updatedAt DateTime? @default(now()) @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
 
-  modules Module[]
+  Modules Module[]
 
   @@map("clients")
 }
@@ -31,10 +31,24 @@ model Module {
   updatedAt DateTime? @default(now()) @db.Timestamptz(6)
   deletedAt DateTime? @db.Timestamptz(6)
 
-  clients Client   @relation(fields: [userId], references: [id])
-  sensors Sensor[]
+  Client  Client   @relation(fields: [userId], references: [id])
+  Sensors Sensor[]
 
   @@map("modules")
+}
+
+model Sensor {
+  id       Int @id @default(autoincrement())
+  moduleId Int
+
+  createdAt DateTime? @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @default(now()) @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+
+  Module     Module       @relation(fields: [moduleId], references: [id])
+  SensorData SensorData[]
+
+  @@map("sensors")
 }
 
 model SensorData {
@@ -46,24 +60,8 @@ model SensorData {
   turbidity   Float
 
   createdAt DateTime? @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @default(now()) @db.Timestamptz(6)
-  deletedAt DateTime? @db.Timestamptz(6)
 
-  sensors Sensor @relation(fields: [sensorId], references: [id])
+  Sensor Sensor @relation(fields: [sensorId], references: [id])
 
   @@map("sensorData")
-}
-
-model Sensor {
-  id       Int @id @default(autoincrement())
-  moduleId Int
-
-  createdAt DateTime? @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime? @default(now()) @db.Timestamptz(6)
-  deletedAt DateTime? @db.Timestamptz(6)
-
-  sensorData SensorData[]
-  modules    Module       @relation(fields: [moduleId], references: [id])
-
-  @@map("sensors")
 }
