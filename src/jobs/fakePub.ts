@@ -23,7 +23,7 @@ const randomInInterval = (min: number, max: number, fix = 2): string =>
 const updateData = (client: MqttClient) => {
   let errorRegistered = false
 
-  cron.schedule('*/10 * * * * *', async (): Promise<void> => {
+  cron.schedule('00 */5 * * * *', async (): Promise<void> => {
     const pubDebug = debug(`${MAIN_TOPIC}:Mqtt:demo:pub`)
 
     pubDebug(`Job started at: ${new Date().toISOString()}`)
