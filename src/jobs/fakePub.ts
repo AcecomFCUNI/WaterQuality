@@ -6,14 +6,14 @@ import { MAIN_TOPIC } from 'utils'
 
 const clients = [
   {
-    id: '95008c5b-db0f-442f-99c0-4dc06562a91a',
-    moduleId: 3,
-    sensorId: 2
+    id: '8e234a60-4b52-431a-8c33-98fac1bca3a9',
+    moduleId: 1,
+    sensorId: 1
   },
   {
-    id: 'bec5d8bf-1b42-4014-a72d-2c864a5a89d1',
-    moduleId: 4,
-    sensorId: 3
+    id: 'ad532c60-00aa-4cea-af45-30c0af1a87e8',
+    moduleId: 2,
+    sensorId: 2
   }
 ]
 
