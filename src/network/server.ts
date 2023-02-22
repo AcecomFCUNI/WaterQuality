@@ -11,11 +11,11 @@ const serverDebug = debug(namespace)
 const start = async () => {
   firebaseConnection(serverDebug, async () => {
     socketConnection(serverDebug).connect()
+    await dbConnection(serverDebug).connect()
     startMqtt(serverDebug)
-    dbConnection().connect()
   })
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV !== 'production') {
     const { updateData } = await import('../jobs')
 
     updateData(getClient())

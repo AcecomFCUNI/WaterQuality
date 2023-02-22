@@ -1,6 +1,11 @@
-import { saveClientData } from 'database/postgres'
-import { Database } from 'firebase-admin/lib/database/database.js'
 import { z } from 'zod'
+import { Database } from 'firebase-admin/lib/database/database.js'
+import debug from 'debug'
+
+import { saveClientData } from 'database'
+import { MAIN_TOPIC } from 'utils'
+
+const realTimeDebug = debug(`${MAIN_TOPIC}:Mqtt:FirebaseRealTime`)
 
 const clientData = z.object({
   date: z.string(),
@@ -27,44 +32,51 @@ const getData = async ({
   id,
   moduleId,
   sensorId
-}: Omit<Update, 'value'>): Promise<ClientData> => {
+}: Omit<Update, 'value'>) => {
   const result = await db.ref(`/ids/${id}/${moduleId}/${sensorId}`).get()
 
-  return clientData.parse(result.val())
+  try {
+    return clientData.parse(result.val())
+  } catch {
+    return null
+  }
 }
 
 const updateDate = ({ db, id, moduleId, sensorId, value }: Update<string>) => {
-  db.ref(`/ids/${id}/${moduleId}/${sensorId}/date`).set(value)
-}
-
-const updatePH = ({ db, id, moduleId, sensorId, value }: Update) => {
-  db.ref(`/ids/${id}/${moduleId}/${sensorId}/pH`).set(value)
-}
-
-const updateTDS = ({ db, id, moduleId, sensorId, value }: Update) => {
-  db.ref(`/ids/${id}/${moduleId}/${sensorId}/tds`).set(value)
-}
-
-const updateTemperature = ({ db, id, moduleId, sensorId, value }: Update) => {
-  db.ref(`/ids/${id}/${moduleId}/${sensorId}/temperature`).set(value)
-}
-
-const updateTurbidity = ({
-  db,
-  id,
-  moduleId,
-  sensorId,
-  value,
-  date
-}: Update & { date: Date }) => {
-  db.ref(`/ids/${id}/${moduleId}/${sensorId}/turbidity`).set(value, error => {
-    if (error) return console.error('Error on update turbidity', error)
-
-    updateDate({ db, id, moduleId, sensorId, value: date.toISOString() })
+  db.ref(`/ids/${id}/${moduleId}/${sensorId}/date`).set(value, error => {
+    if (error) realTimeDebug(`Error: ${error}`)
+    else realTimeDebug('Date updated.')
   })
 }
 
-// TODO: modify this function to update the sensorData in the postgreSQL database
+const updatePH = ({ db, id, moduleId, sensorId, value }: Update) => {
+  db.ref(`/ids/${id}/${moduleId}/${sensorId}/pH`).set(value, error => {
+    if (error) realTimeDebug(`Error: ${error}`)
+    else realTimeDebug('PH updated.')
+  })
+}
+
+const updateTDS = ({ db, id, moduleId, sensorId, value }: Update) => {
+  db.ref(`/ids/${id}/${moduleId}/${sensorId}/tds`).set(value, error => {
+    if (error) realTimeDebug(`Error: ${error}`)
+    else realTimeDebug('TDS updated.')
+  })
+}
+
+const updateTemperature = ({ db, id, moduleId, sensorId, value }: Update) => {
+  db.ref(`/ids/${id}/${moduleId}/${sensorId}/temperature`).set(value, error => {
+    if (error) realTimeDebug(`Error: ${error}`)
+    else realTimeDebug('Temperature updated.')
+  })
+}
+
+const updateTurbidity = ({ db, id, moduleId, sensorId, value }: Update) => {
+  db.ref(`/ids/${id}/${moduleId}/${sensorId}/turbidity`).set(value, error => {
+    if (error) realTimeDebug(`Error: ${error}`)
+    else realTimeDebug('Turbidity updated.')
+  })
+}
+
 const listenChangesInDate = ({
   db,
   id,
@@ -74,11 +86,16 @@ const listenChangesInDate = ({
   db.ref(`/ids/${id}/${moduleId}/${sensorId}/date`).on('value', async () => {
     const data = await getData({ db, id, moduleId, sensorId })
 
-    try {
-      await saveClientData(z.coerce.number().parse(sensorId), data)
-    } catch (error) {
-      console.error('Error: ', error)
-    }
+    if (data)
+      try {
+        await saveClientData(z.coerce.number().parse(sensorId), data)
+      } catch (error) {
+        realTimeDebug(`Error: ${error}`)
+      }
+    else
+      realTimeDebug(
+        `Error: The data for the sensor ${sensorId} was not found in the database.`
+      )
   })
 }
 

@@ -43,8 +43,6 @@ CREATE TABLE "sensorData" (
     "tds" DOUBLE PRECISION NOT NULL,
     "turbidity" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMPTZ(6) DEFAULT CURRENT_TIMESTAMP,
-    "deletedAt" TIMESTAMPTZ(6),
 
     CONSTRAINT "sensorData_pkey" PRIMARY KEY ("id")
 );

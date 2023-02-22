@@ -1,3 +1,4 @@
+export * from './date'
 export * from './pH'
 export * from './tds'
 export * from './temperature'

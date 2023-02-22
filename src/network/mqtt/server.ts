@@ -26,6 +26,9 @@ const getClient = (d?: Debugger) => {
     global.__mqttClient__.on('disconnect', () => {
       d?.(disconnectedMessage)
     })
+    global.__mqttClient__.on('error', error => {
+      d?.(`Error: ${error}`)
+    })
   }
 
   return global.__mqttClient__
