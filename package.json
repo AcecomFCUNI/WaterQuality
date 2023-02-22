@@ -9,8 +9,7 @@
     "start": "DEBUG=WaterQuality:* ts-node ./src/index",
     "release": "standard-version",
     "test:local": "jest --setupFiles dotenv/config --ci -i",
-    "test:ci": "jest --ci -i",
-    "pub": "nodemon --exec \"DEBUG=WQ:* ts-node -r dotenv/config src/pub.ts\""
+    "test:ci": "jest --ci -i"
   },
   "author": "AnthonyLzq <sluzquinosa@uni.pe>",
   "license": "MIT",
