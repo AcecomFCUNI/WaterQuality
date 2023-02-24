@@ -20,11 +20,11 @@ const sub = (client: MqttClient) => {
     if (topic.includes(TOPIC)) {
       const [id, moduleId, sensorId, value] = message.toString().split('/')
 
-      subDebug(`\nTopic: ${topic} - Message received`)
+      subDebug(`Topic: ${topic} - Message received`)
       subDebug(
         `Received ${TOPIC.toUpperCase()} update at: ${new Date().toISOString()}`
       )
-      subDebug(`Message: \t${message}\n`)
+      subDebug(`Message: \t${message}`)
       updateTDS({ db, moduleId, id, value: parseFloat(value), sensorId })
       socketConnection(subDebug)
         .connect()

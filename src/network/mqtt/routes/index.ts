@@ -1,5 +1,6 @@
 export * from './date'
 export * from './pH'
+export * from './ping'
 export * from './tds'
 export * from './temperature'
 export * from './turbidity'

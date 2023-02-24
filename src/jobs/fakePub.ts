@@ -49,19 +49,16 @@ const clientPublish = <T>({
 }
 
 const updateData = (client: MqttClient) => {
-  let errorRegistered = false
+  const pubDebug = debug(`${MAIN_TOPIC}:Mqtt:pub`)
+
+  if (process.env.NODE_ENV === 'production') {
+    pubDebug(`This job: "${updateData.name}" is not allowed in production.`)
+
+    return
+  }
 
   cron.schedule('*/5 * * * * *', async (): Promise<void> => {
-    const pubDebug = debug(`${MAIN_TOPIC}:Mqtt:pub`)
-
     pubDebug(`Job started at: ${new Date().toISOString()}`)
-
-    if (!errorRegistered) {
-      client.on('error', error => {
-        pubDebug('Error: ', error)
-      })
-      errorRegistered = true
-    }
 
     for (const { id, moduleId, sensorId } of clients) {
       const currentIsoTime = new Date().toISOString()

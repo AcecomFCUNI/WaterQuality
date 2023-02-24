@@ -6,7 +6,6 @@ import { saveClientData } from 'database'
 import { MAIN_TOPIC } from 'utils'
 
 const realTimeDebug = debug(`${MAIN_TOPIC}:Mqtt:FirebaseRealTime`)
-
 const clientData = z.object({
   date: z.string(),
   pH: z.number(),
