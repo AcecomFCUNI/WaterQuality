@@ -6,7 +6,7 @@ import { MAIN_TOPIC } from 'utils'
 
 const clients = [
   {
-    id: '95008c5b-db0f-442f-99c0-4dc06562a91a',
+    id: '4dAwTN1iACNWkbVpIB0j2xxqlIm1',
     moduleId: 1,
     sensorId: 1
   }
