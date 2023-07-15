@@ -51,7 +51,7 @@ const clientPublish = <T>({
 const updateData = (client: MqttClient) => {
   const pubDebug = debug(`${MAIN_TOPIC}:Mqtt:pub`)
 
-  cron.schedule('*/10 * * * * *', async (): Promise<void> => {
+  cron.schedule('* * */1 * * *', async (): Promise<void> => {
     pubDebug(`Job started at: ${new Date().toISOString()}`)
 
     for (const { id, moduleId, sensorId } of clients) {
