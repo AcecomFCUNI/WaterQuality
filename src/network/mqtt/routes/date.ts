@@ -19,13 +19,20 @@ const sub = (client: MqttClient) => {
 
   client.on('message', (topic, message) => {
     if (topic.includes(TOPIC)) {
-      const [id, moduleId, sensorId] = message.toString().split('/')
+      const [id, moduleId, sensorId, , env] = message.toString().split('/')
       const isoDate = new Date().toISOString()
 
       subDebug(`Topic: ${topic} - Message received`)
       subDebug(`Received ${TOPIC.toUpperCase()} update at: ${isoDate}`)
       subDebug(`Message: \t${message}`)
-      updateDate({ db, moduleId, id, value: isoDate, sensorId })
+      updateDate({
+        db,
+        moduleId,
+        id,
+        value: isoDate,
+        sensorId,
+        demo: env === 'demo'
+      })
       socketConnection(subDebug).connect().emit(`${sensorId}/date`, isoDate)
 
       if (!subscribed) {

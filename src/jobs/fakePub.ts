@@ -29,6 +29,7 @@ type ClientPublishProps<T> = {
   moduleId: number
   sensorId: number
   topic: string
+  demo?: boolean
   cb?: () => void
 }
 
@@ -39,11 +40,12 @@ const clientPublish = <T>({
   moduleId,
   sensorId,
   topic,
+  demo,
   cb
 }: ClientPublishProps<T>) => {
   client.publish(
     `${MAIN_TOPIC}/${topic}`,
-    `${id}/${moduleId}/${sensorId}/${value}`
+    `${id}/${moduleId}/${sensorId}/${value}${demo ? '/demo' : ''}}`
   )
   cb?.()
 }
@@ -96,7 +98,8 @@ const updateData = (client: MqttClient) => {
                         id,
                         moduleId,
                         sensorId,
-                        topic: 'date'
+                        topic: 'date',
+                        demo: true
                       })
                     }
                   })
