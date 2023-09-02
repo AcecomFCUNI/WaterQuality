@@ -99,16 +99,27 @@ const listenChangesInDate = ({
   db.ref(`/ids/${id}/${moduleId}/${sensorId}/date`).on('value', async () => {
     const data = await getData({ db, id, moduleId, sensorId })
 
-    if (data && !data.demo)
+    if (data && !data.demo) {
       try {
         await saveClientData(z.coerce.number().parse(sensorId), data)
       } catch (error) {
         realTimeDebug(`Error: ${error}`)
       }
-    else
+
+      return
+    }
+
+    if (data && data.demo) {
       realTimeDebug(
-        `Error: The data for the sensor ${sensorId} was not found in the database.`
+        `The data for the sensor ${sensorId} was not saved because it is a demo.`
       )
+
+      return
+    }
+
+    realTimeDebug(
+      `Error: The data for the sensor ${sensorId} was not found in the database.`
+    )
   })
 }
 
