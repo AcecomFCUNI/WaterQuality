@@ -45,7 +45,7 @@ const clientPublish = <T>({
 }: ClientPublishProps<T>) => {
   client.publish(
     `${MAIN_TOPIC}/${topic}`,
-    `${id}/${moduleId}/${sensorId}/${value}${demo ? '/demo' : ''}}`
+    `${id}/${moduleId}/${sensorId}/${value}${demo ? '/demo' : ''}`
   )
   cb?.()
 }
@@ -53,7 +53,7 @@ const clientPublish = <T>({
 const updateData = (client: MqttClient) => {
   const pubDebug = debug(`${MAIN_TOPIC}:Mqtt:pub`)
 
-  cron.schedule('*/59 * * * *', async (): Promise<void> => {
+  cron.schedule('*/45 * * * * *', async (): Promise<void> => {
     pubDebug(`Job started at: ${new Date().toISOString()}`)
 
     for (const { id, moduleId, sensorId } of clients) {

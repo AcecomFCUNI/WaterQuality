@@ -20,11 +20,10 @@ const sub = (client: MqttClient) => {
     if (topic.includes(TOPIC)) {
       const [id, moduleId, sensorId, value] = message.toString().split('/')
 
-      subDebug(`Topic: ${topic} - Message received`)
+      subDebug(`Topic: ${topic} - Message received: ${message.toString()}`)
       subDebug(
         `Received ${TOPIC.toUpperCase()} update at: ${new Date().toISOString()}`
       )
-      subDebug(`Message: \t${message}`)
       updateTemperature({
         db,
         id,
