@@ -34,7 +34,9 @@ const getData = async ({
   moduleId,
   sensorId
 }: Omit<Update, 'value'>) => {
-  const result = await db.ref(`/ids/${id}/${moduleId}/${sensorId}`).get()
+  const result = await db
+    .ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}`)
+    .get()
 
   try {
     return clientData.parse(result.val())
@@ -52,42 +54,60 @@ const updateDate = ({
   demo = false
 }: Update<string>) => {
   if (demo)
-    db.ref(`/ids/${id}/${moduleId}/${sensorId}/demo`).set(true, error => {
-      if (error) realTimeDebug(`Error: ${error}`)
-    })
+    db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/demo`).set(
+      true,
+      error => {
+        if (error) realTimeDebug(`Error: ${error}`)
+      }
+    )
 
-  db.ref(`/ids/${id}/${moduleId}/${sensorId}/date`).set(value, error => {
-    if (error) realTimeDebug(`Error: ${error}`)
-    else realTimeDebug('Date updated.')
-  })
+  db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/date`).set(
+    value,
+    error => {
+      if (error) realTimeDebug(`Error: ${error}`)
+      else realTimeDebug('Date updated.')
+    }
+  )
 }
 
 const updatePH = ({ db, id, moduleId, sensorId, value }: Update) => {
-  db.ref(`/ids/${id}/${moduleId}/${sensorId}/pH`).set(value, error => {
-    if (error) realTimeDebug(`Error: ${error}`)
-    else realTimeDebug('PH updated.')
-  })
+  db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/pH`).set(
+    value,
+    error => {
+      if (error) realTimeDebug(`Error: ${error}`)
+      else realTimeDebug('PH updated.')
+    }
+  )
 }
 
 const updateTDS = ({ db, id, moduleId, sensorId, value }: Update) => {
-  db.ref(`/ids/${id}/${moduleId}/${sensorId}/tds`).set(value, error => {
-    if (error) realTimeDebug(`Error: ${error}`)
-    else realTimeDebug('TDS updated.')
-  })
+  db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/tds`).set(
+    value,
+    error => {
+      if (error) realTimeDebug(`Error: ${error}`)
+      else realTimeDebug('TDS updated.')
+    }
+  )
 }
 
 const updateTemperature = ({ db, id, moduleId, sensorId, value }: Update) => {
-  db.ref(`/ids/${id}/${moduleId}/${sensorId}/temperature`).set(value, error => {
-    if (error) realTimeDebug(`Error: ${error}`)
-    else realTimeDebug('Temperature updated.')
-  })
+  db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/temperature`).set(
+    value,
+    error => {
+      if (error) realTimeDebug(`Error: ${error}`)
+      else realTimeDebug('Temperature updated.')
+    }
+  )
 }
 
 const updateTurbidity = ({ db, id, moduleId, sensorId, value }: Update) => {
-  db.ref(`/ids/${id}/${moduleId}/${sensorId}/turbidity`).set(value, error => {
-    if (error) realTimeDebug(`Error: ${error}`)
-    else realTimeDebug('Turbidity updated.')
-  })
+  db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/turbidity`).set(
+    value,
+    error => {
+      if (error) realTimeDebug(`Error: ${error}`)
+      else realTimeDebug('Turbidity updated.')
+    }
+  )
 }
 
 const listenChangesInDate = ({
@@ -96,31 +116,34 @@ const listenChangesInDate = ({
   moduleId,
   sensorId
 }: Omit<Update, 'value'>) => {
-  db.ref(`/ids/${id}/${moduleId}/${sensorId}/date`).on('value', async () => {
-    const data = await getData({ db, id, moduleId, sensorId })
+  db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/date`).on(
+    'value',
+    async () => {
+      const data = await getData({ db, id, moduleId, sensorId })
 
-    if (data && !data.demo) {
-      try {
-        await saveClientData(z.coerce.number().parse(sensorId), data)
-      } catch (error) {
-        realTimeDebug(`Error: ${error}`)
+      if (data && !data.demo) {
+        try {
+          await saveClientData(z.coerce.number().parse(sensorId), data)
+        } catch (error) {
+          realTimeDebug(`Error: ${error}`)
+        }
+
+        return
       }
 
-      return
-    }
+      if (data?.demo) {
+        realTimeDebug(
+          `The data for the sensor ${sensorId} was not saved because it is a demo.`
+        )
 
-    if (data && data.demo) {
+        return
+      }
+
       realTimeDebug(
-        `The data for the sensor ${sensorId} was not saved because it is a demo.`
+        `Error: The data for the sensor ${sensorId} was not found in the database.`
       )
-
-      return
     }
-
-    realTimeDebug(
-      `Error: The data for the sensor ${sensorId} was not found in the database.`
-    )
-  })
+  )
 }
 
 export {
