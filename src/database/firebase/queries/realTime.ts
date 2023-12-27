@@ -35,7 +35,7 @@ const getData = async ({
   sensorId
 }: Omit<Update, 'value'>) => {
   const result = await db
-    .ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}`)
+    .ref(`/${MAIN_TOPIC}/${id}/${moduleId}/${sensorId}`)
     .get()
 
   try {
@@ -54,14 +54,14 @@ const updateDate = ({
   demo = false
 }: Update<string>) => {
   if (demo)
-    db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/demo`).set(
+    db.ref(`/${MAIN_TOPIC}/${id}/${moduleId}/${sensorId}/demo`).set(
       true,
       error => {
         if (error) realTimeDebug(`Error: ${error}`)
       }
     )
 
-  db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/date`).set(
+  db.ref(`/${MAIN_TOPIC}/${id}/${moduleId}/${sensorId}/date`).set(
     value,
     error => {
       if (error) realTimeDebug(`Error: ${error}`)
@@ -71,7 +71,7 @@ const updateDate = ({
 }
 
 const updatePH = ({ db, id, moduleId, sensorId, value }: Update) => {
-  db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/pH`).set(
+  db.ref(`/${MAIN_TOPIC}/${id}/${moduleId}/${sensorId}/pH`).set(
     value,
     error => {
       if (error) realTimeDebug(`Error: ${error}`)
@@ -81,7 +81,7 @@ const updatePH = ({ db, id, moduleId, sensorId, value }: Update) => {
 }
 
 const updateTDS = ({ db, id, moduleId, sensorId, value }: Update) => {
-  db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/tds`).set(
+  db.ref(`/${MAIN_TOPIC}/${id}/${moduleId}/${sensorId}/tds`).set(
     value,
     error => {
       if (error) realTimeDebug(`Error: ${error}`)
@@ -91,7 +91,7 @@ const updateTDS = ({ db, id, moduleId, sensorId, value }: Update) => {
 }
 
 const updateTemperature = ({ db, id, moduleId, sensorId, value }: Update) => {
-  db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/temperature`).set(
+  db.ref(`/${MAIN_TOPIC}/${id}/${moduleId}/${sensorId}/temperature`).set(
     value,
     error => {
       if (error) realTimeDebug(`Error: ${error}`)
@@ -101,7 +101,7 @@ const updateTemperature = ({ db, id, moduleId, sensorId, value }: Update) => {
 }
 
 const updateTurbidity = ({ db, id, moduleId, sensorId, value }: Update) => {
-  db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/turbidity`).set(
+  db.ref(`/${MAIN_TOPIC}/${id}/${moduleId}/${sensorId}/turbidity`).set(
     value,
     error => {
       if (error) realTimeDebug(`Error: ${error}`)
@@ -116,7 +116,7 @@ const listenChangesInDate = ({
   moduleId,
   sensorId
 }: Omit<Update, 'value'>) => {
-  db.ref(`/${MAIN_TOPIC}/ids/${id}/${moduleId}/${sensorId}/date`).on(
+  db.ref(`/${MAIN_TOPIC}/${id}/${moduleId}/${sensorId}/date`).on(
     'value',
     async () => {
       const data = await getData({ db, id, moduleId, sensorId })
