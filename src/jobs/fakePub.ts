@@ -5,8 +5,8 @@ import { MqttClient } from 'mqtt'
 import { MAIN_TOPIC } from 'utils'
 
 const DEMO_CLIENT = {
-  id: '4dAwTN1iACNWkbVpIB0j2xxqlIm1',
-  moduleId: 1,
+  id: 'OVoCPKh78GQ8VTBR1ClOiHPWzl53',
+  moduleId: 4,
   sensorId: 1
 }
 
