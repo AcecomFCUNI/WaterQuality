@@ -15,11 +15,13 @@ const start = async () => {
     startMqtt(serverDebug)
   })
 
-  const jobs = await import('../jobs')
+  if (process.env.NODE_ENV !== 'local') {
+    const jobs = await import('../jobs')
 
-  ;(Object.keys(jobs) as (keyof typeof jobs)[]).forEach(job => {
-    jobs[job](getClient(serverDebug))
-  })
+    ;(Object.keys(jobs) as (keyof typeof jobs)[]).forEach(job => {
+      jobs[job](getClient(serverDebug))
+    })
+  }
 }
 
 export { start }
