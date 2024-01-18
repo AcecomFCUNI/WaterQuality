@@ -53,19 +53,18 @@ const updateDate = ({
   value,
   demo = false
 }: Update<string>) => {
-  if (demo)
-    db.ref(`/${MAIN_TOPIC}/${id}/${moduleId}/${sensorId}/demo`).set(
-      true,
-      error => {
-        if (error) realTimeDebug(`Error: ${error}`)
-      }
-    )
-
-  db.ref(`/${MAIN_TOPIC}/${id}/${moduleId}/${sensorId}/date`).set(
-    value,
+  db.ref(`/${MAIN_TOPIC}/${id}/${moduleId}/${sensorId}/demo`).set(
+    demo,
     error => {
       if (error) realTimeDebug(`Error: ${error}`)
-      else realTimeDebug('Date updated.')
+      else
+        db.ref(`/${MAIN_TOPIC}/${id}/${moduleId}/${sensorId}/date`).set(
+          value,
+          error => {
+            if (error) realTimeDebug(`Error: ${error}`)
+            else realTimeDebug('Date updated.')
+          }
+        )
     }
   )
 }
@@ -122,8 +121,11 @@ const listenChangesInDate = ({
       const data = await getData({ db, id, moduleId, sensorId })
 
       if (data && !data.demo) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { demo: _, ...rest } = data
+
         try {
-          await saveClientData(z.coerce.number().parse(sensorId), data)
+          await saveClientData(z.coerce.number().parse(sensorId), rest)
         } catch (error) {
           realTimeDebug(`Error: ${error}`)
         }
