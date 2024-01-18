@@ -90,7 +90,7 @@ const updateData = (client: MqttClient) => {
                       moduleId,
                       sensorId,
                       topic: 'date',
-                      demo: true
+                      demo: false
                     })
                   }
                 })
