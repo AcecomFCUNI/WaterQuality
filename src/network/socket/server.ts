@@ -3,6 +3,9 @@ import { Debugger } from 'debug'
 import { Server } from 'socket.io'
 
 const PORT = parseInt(process.env.PORT as string) || 1996
+const ORIGIN = ['http://localhost:3000'].concat(
+  process.env.FRONT_URLS?.split(',') ?? []
+)
 
 const socketConnection = (d: Debugger) => ({
   connect: () => {
@@ -31,7 +34,7 @@ const socketConnection = (d: Debugger) => ({
           fn(null, true)
         },
         cors: {
-          origin: ['http://localhost:3000', process.env.FRONT_URL as string]
+          origin: ORIGIN
         }
       })
 
